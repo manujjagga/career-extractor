@@ -66,13 +66,25 @@ def process_file():
 
     df = pd.read_csv(filepath)
     results = []
+    logs = []
 
-    for _, row in df.iterrows():
+    for index, row in df.iterrows():
         company_id = row['id']
         company_name = row['name']
         domains = parse_domains(row['domains'])
+
         for domain in domains:
+            log_msg = f"🔍 Searching {company_name} - {domain}..."
+            print(log_msg)
+            logs.append(log_msg)
+
             link = find_careers_link(domain)
+
+            if link:
+                logs.append(f"✅ Found: {link}")
+            else:
+                logs.append("❌ Not Found")
+
             results.append({
                 "id": company_id,
                 "company_name": company_name,
@@ -84,7 +96,7 @@ def process_file():
     output_path = os.path.join(RESULT_FOLDER, "output.csv")
     pd.DataFrame(results).to_csv(output_path, index=False)
 
-    return render_template("index.html", download_url="/download")
+    return render_template("index.html", download_url="/download", logs=logs)
 
 @app.route("/download", methods=["GET"])
 def download_file():
