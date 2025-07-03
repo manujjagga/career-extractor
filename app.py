@@ -29,6 +29,7 @@ def is_probable_career_link(href, text):
 
     if any(kw in href or kw in text for kw in CAREER_KEYWORDS):
         return True
+
     parts = href.strip("/").split("/")
     return any(kw in part for part in parts for kw in CAREER_KEYWORDS)
 
