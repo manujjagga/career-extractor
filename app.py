@@ -26,10 +26,11 @@ def try_fetch(url):
 def is_probable_career_link(href, text):
     href = href.lower()
     text = (text or "").lower()
+
     if any(kw in href or kw in text for kw in CAREER_KEYWORDS):
         return True
     parts = href.strip("/").split("/")
-    return any(kw in part for kw in CAREER_KEYWORDS for kw in parts)
+    return any(kw in part for part in parts for kw in CAREER_KEYWORDS)
 
 def find_careers_link(domain):
     base_variants = [f"https://{domain}", f"http://{domain}"]
